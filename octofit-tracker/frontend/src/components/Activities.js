@@ -31,32 +31,40 @@ function Activities({ apiBaseUrl }) {
     fetchActivities();
   }, [apiBaseUrl]);
 
-  if (loading) return <div className="alert alert-info">Loading activities...</div>;
-  if (error) return <div className="alert alert-danger">Error: {error}</div>;
+  if (loading) return <div className="alert alert-info"><span className="loading-spinner">⏳</span> Loading activities...</div>;
+  if (error) return <div className="alert alert-danger"><strong>Error:</strong> {error}</div>;
 
   return (
     <div>
-      <h2>Activities</h2>
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {activities.map(activity => (
-            <tr key={activity.id}>
-              <td>{activity.id}</td>
-              <td>{activity.name || activity.activity_type}</td>
-              <td>{activity.description}</td>
-              <td>{activity.date || activity.created_at}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h2>🏃 Activities</h2>
+      {activities.length === 0 ? (
+        <div className="alert alert-warning">No activities found.</div>
+      ) : (
+        <div className="table-responsive">
+          <table className="table table-striped table-hover">
+            <thead className="table-dark">
+              <tr>
+                <th>ID</th>
+                <th>Activity Type</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              {activities.map(activity => (
+                <tr key={activity.id}>
+                  <td><strong>{activity.id}</strong></td>
+                  <td>{activity.name || activity.activity_type || 'N/A'}</td>
+                  <td>{activity.description || 'N/A'}</td>
+                  <td>{activity.date || activity.created_at || 'N/A'}</td>
+                  <td>{activity.duration || 'N/A'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

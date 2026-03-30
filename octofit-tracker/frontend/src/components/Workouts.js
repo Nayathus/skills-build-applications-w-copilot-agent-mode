@@ -31,27 +31,57 @@ function Workouts({ apiBaseUrl }) {
     fetchWorkouts();
   }, [apiBaseUrl]);
 
-  if (loading) return <div className="alert alert-info">Loading workouts...</div>;
-  if (error) return <div className="alert alert-danger">Error: {error}</div>;
+  if (loading) return <div className="alert alert-info"><span className="loading-spinner">⏳</span> Loading workouts...</div>;
+  if (error) return <div className="alert alert-danger"><strong>Error:</strong> {error}</div>;
 
   return (
     <div>
-      <h2>Workouts</h2>
-      <div className="row">
-        {workouts.map(workout => (
-          <div key={workout.id} className="col-md-4 mb-3">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">{workout.name || workout.workout_type}</h5>
-                <p className="card-text">Duration: {workout.duration} mins</p>
-                <p className="card-text">Intensity: {workout.intensity}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <h2>💪 Workouts</h2>
+      {workouts.length === 0 ? (
+        <div className="alert alert-warning">No workouts found.</div>
+      ) : (
+        <div className="table-responsive">
+          <table className="table table-striped table-hover">
+            <thead className="table-dark">
+              <tr>
+                <th>ID</th>
+                <th>Workout Name</th>
+                <th>Type</th>
+                <th>Duration (mins)</th>
+                <th>Intensity</th>
+                <th>Calories Burned</th>
+              </tr>
+            </thead>
+            <tbody>
+              {workouts.map(workout => (
+                <tr key={workout.id}>
+                  <td><strong>{workout.id}</strong></td>
+                  <td>{workout.name || workout.workout_type || 'N/A'}</td>
+                  <td>{workout.workout_type || 'N/A'}</td>
+                  <td>{workout.duration || 'N/A'}</td>
+                  <td>
+                    <span className={`badge bg-${getIntensityColor(workout.intensity)}`}>
+                      {workout.intensity || 'N/A'}
+                    </span>
+                  </td>
+                  <td>{workout.calories_burned || 'N/A'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
+}
+
+function getIntensityColor(intensity) {
+  switch(intensity?.toLowerCase()) {
+    case 'low': return 'info';
+    case 'medium': return 'warning';
+    case 'high': return 'danger';
+    default: return 'secondary';
+  }
 }
 
 export default Workouts;

@@ -31,24 +31,40 @@ function Users({ apiBaseUrl }) {
     fetchUsers();
   }, [apiBaseUrl]);
 
-  if (loading) return <div className="alert alert-info">Loading users...</div>;
-  if (error) return <div className="alert alert-danger">Error: {error}</div>;
+  if (loading) return <div className="alert alert-info"><span className="loading-spinner">⏳</span> Loading users...</div>;
+  if (error) return <div className="alert alert-danger"><strong>Error:</strong> {error}</div>;
 
   return (
     <div>
-      <h2>Users</h2>
-      <div className="row">
-        {users.map(user => (
-          <div key={user.id} className="col-md-4 mb-3">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">{user.username || user.name}</h5>
-                <p className="card-text">Email: {user.email}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <h2>👥 Users</h2>
+      {users.length === 0 ? (
+        <div className="alert alert-warning">No users found.</div>
+      ) : (
+        <div className="table-responsive">
+          <table className="table table-striped table-hover">
+            <thead className="table-dark">
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map(user => (
+                <tr key={user.id}>
+                  <td><strong>{user.id}</strong></td>
+                  <td>{user.username || user.name || 'N/A'}</td>
+                  <td>{user.email || 'N/A'}</td>
+                  <td>{user.first_name || 'N/A'}</td>
+                  <td>{user.last_name || 'N/A'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

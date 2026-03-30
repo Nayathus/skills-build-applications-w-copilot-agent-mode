@@ -31,25 +31,44 @@ function Teams({ apiBaseUrl }) {
     fetchTeams();
   }, [apiBaseUrl]);
 
-  if (loading) return <div className="alert alert-info">Loading teams...</div>;
-  if (error) return <div className="alert alert-danger">Error: {error}</div>;
+  if (loading) return <div className="alert alert-info"><span className="loading-spinner">⏳</span> Loading teams...</div>;
+  if (error) return <div className="alert alert-danger"><strong>Error:</strong> {error}</div>;
 
   return (
     <div>
-      <h2>Teams</h2>
-      <div className="row">
-        {teams.map(team => (
-          <div key={team.id} className="col-md-6 mb-3">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">{team.name}</h5>
-                <p className="card-text">Members: {team.member_count || team.members?.length || 0}</p>
-                <p className="card-text">{team.description}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <h2>👥 Teams</h2>
+      {teams.length === 0 ? (
+        <div className="alert alert-warning">No teams found.</div>
+      ) : (
+        <div className="table-responsive">
+          <table className="table table-striped table-hover">
+            <thead className="table-dark">
+              <tr>
+                <th>ID</th>
+                <th>Team Name</th>
+                <th>Description</th>
+                <th>Members</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teams.map(team => (
+                <tr key={team.id}>
+                  <td><strong>{team.id}</strong></td>
+                  <td>{team.name || 'N/A'}</td>
+                  <td>{team.description || 'N/A'}</td>
+                  <td>
+                    <span className="badge bg-primary">
+                      {team.member_count || team.members?.length || 0}
+                    </span>
+                  </td>
+                  <td>{team.created_at || team.created || 'N/A'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
