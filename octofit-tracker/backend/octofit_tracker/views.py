@@ -25,8 +25,15 @@ class WorkoutViewSet(viewsets.ModelViewSet):
     serializer_class = WorkoutSerializer
 
 @api_view(['GET'])
-def api_root(request, format=None):
-    base_url = '/api/'
+def api_root(request, base_url=None, format=None):
+    if not base_url:
+        base_url = '/api/'
+    elif not base_url.endswith('/api') and not base_url.endswith('/api/'):
+        base_url = base_url.rstrip('/') + '/api/'
+    elif not base_url.endswith('/'):
+        base_url = base_url + '/'
+    else:
+        base_url = base_url
     return Response({
         'users': base_url + 'users/',
         'teams': base_url + 'teams/',

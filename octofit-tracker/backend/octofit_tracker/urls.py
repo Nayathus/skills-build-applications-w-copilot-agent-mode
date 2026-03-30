@@ -19,6 +19,12 @@ from rest_framework import routers
 from . import views
 
 import os
+codespace_name = os.environ.get('CODESPACE_NAME')
+if codespace_name:
+    base_url = f"https://{codespace_name}-8000.app.github.dev"
+else:
+    base_url = "http://localhost:8000"
+
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'teams', views.TeamViewSet)
@@ -28,7 +34,7 @@ router.register(r'workouts', views.WorkoutViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', views.api_root, name='api-root'),
+    path('api/', views.api_root, {'base_url': base_url}, name='api-root'),
     path('api/', include(router.urls)),
-    path('', views.api_root),
+    path('', views.api_root, {'base_url': base_url}),
 ]
