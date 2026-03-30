@@ -18,6 +18,7 @@ from django.urls import path, include
 from rest_framework import routers
 from . import views
 
+import os
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'teams', views.TeamViewSet)
@@ -27,6 +28,7 @@ router.register(r'workouts', views.WorkoutViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.api_root, name='api-root'),
-    path('', include(router.urls)),
+    path('api/', views.api_root, name='api-root'),
+    path('api/', include(router.urls)),
+    path('', views.api_root),
 ]
