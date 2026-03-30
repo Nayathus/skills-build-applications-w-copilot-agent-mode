@@ -1,0 +1,13 @@
+use octofit_db;
+print('Collections:');
+printjson(db.getCollectionNames());
+print('\nSample users:');
+printjson(db.auth_user.find().limit(2).toArray());
+print('\nSample teams:');
+printjson(db.octofit_tracker_team.find().limit(2).toArray());
+print('\nSample activities:');
+printjson(db.octofit_tracker_activity.find().limit(2).toArray());
+print('\nSample leaderboard:');
+printjson(db.octofit_tracker_leaderboard.find().limit(2).toArray());
+print('\nSample workouts:');
+printjson(db.octofit_tracker_workout.find().limit(2).toArray());
